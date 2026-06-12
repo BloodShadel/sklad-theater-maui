@@ -1,0 +1,66 @@
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/*/build/
+android/local.properties
+android/.idea/
+android/*.iml
+
+# iOS (legacy)
+ios/**/build/
+ios/**/DerivedData/
+ios/**/*.xcworkspace/xcuserdata/
+ios/**/*.xcodeproj/xcuserdata/
+ios/**/*.xcodeproj/project.xcworkspace/
+
+# Node.js
+server/node_modules/
+server/npm-debug.log*
+server/yarn-debug.log*
+server/yarn-error.log*
+server/debug.log
+server/err.log
+server/out.log
+
+# .NET / MAUI
+maui/**/bin/
+maui/**/obj/
+maui/**/*.user
+maui/**/*.suo
+maui/**/.vs/
+maui/**/.vscode/
+
+# Build outputs
+*.apk
+*.aab
+*.ipa
+*.app
+*.dmg
+*.pkg
+*.msix
+
+# Secrets
+*.pfx
+*.p12
+*.key
+*.jks
+*.keystore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+.temp/

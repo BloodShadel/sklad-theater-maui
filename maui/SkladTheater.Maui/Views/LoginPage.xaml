@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="SkladTheater.Maui.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SkladTheater.Maui.ViewModels"
+    Title="Вход"
+    Shell.NavBarIsVisible="False">
+
+    <VerticalStackLayout
+        Padding="24"
+        Spacing="16"
+        VerticalOptions="Center">
+
+        <Label
+            FontAttributes="Bold"
+            FontSize="28"
+            HorizontalOptions="Center"
+            Text="Склад Театра" />
+
+        <Entry
+            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+            Placeholder="Логин"
+            Text="{Binding Login}" />
+
+        <Entry
+            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+            IsPassword="True"
+            Placeholder="Пароль"
+            Text="{Binding Password}" />
+
+        <HorizontalStackLayout>
+            <CheckBox IsChecked="{Binding RememberMe}" />
+            <Label Text="Запомнить меня" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+        <Label
+            IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+            Text="{Binding ErrorMessage}"
+            TextColor="Red" />
+
+        <Button
+            Command="{Binding LoginCommand}"
+            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+            Text="Войти" />
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+    </VerticalStackLayout>
+</ContentPage>
