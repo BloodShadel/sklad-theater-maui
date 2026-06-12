@@ -31,14 +31,32 @@ public static class MauiProgram
         // ViewModels
         builder.Services.AddTransient<LoginViewModel>();
         builder.Services.AddTransient<ItemsViewModel>();
+        builder.Services.AddTransient<TasksViewModel>();
+        builder.Services.AddTransient<ChestsViewModel>();
+        builder.Services.AddTransient<StallsViewModel>();
+        builder.Services.AddTransient<TapeViewModel>();
+        builder.Services.AddTransient<ShowsViewModel>();
+        builder.Services.AddTransient<KassetyViewModel>();
+        builder.Services.AddTransient<ChatsViewModel>();
+        builder.Services.AddTransient<ChatRoomViewModel>();
         builder.Services.AddTransient<ProfileViewModel>();
         builder.Services.AddTransient<MoreViewModel>();
+        builder.Services.AddTransient<PlaceholderViewModel>();
 
         // Views
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<ItemsPage>();
+        builder.Services.AddTransient<TasksPage>();
+        builder.Services.AddTransient<ChestsPage>();
+        builder.Services.AddTransient<StallsPage>();
+        builder.Services.AddTransient<TapePage>();
+        builder.Services.AddTransient<ShowsPage>();
+        builder.Services.AddTransient<KassetyPage>();
+        builder.Services.AddTransient<ChatsPage>();
+        builder.Services.AddTransient<ChatRoomPage>();
         builder.Services.AddTransient<ProfilePage>();
         builder.Services.AddTransient<MorePage>();
+        builder.Services.AddTransient<PlaceholderPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -6,19 +6,16 @@ using System.Collections.ObjectModel;
 
 namespace SkladTheater.Maui.ViewModels;
 
-public partial class ItemsViewModel : ObservableObject
+public partial class TasksViewModel : ObservableObject
 {
     private readonly ISkladApiService _api;
     private readonly IOfflineCacheService _cache;
 
     [ObservableProperty]
-    private ObservableCollection<ItemDto> _items = new();
+    private ObservableCollection<TaskDto> _tasks = new();
 
     [ObservableProperty]
     private bool _isBusy;
-
-    [ObservableProperty]
-    private string _searchText = string.Empty;
 
     [ObservableProperty]
     private string _statusMessage = string.Empty;
@@ -26,7 +23,7 @@ public partial class ItemsViewModel : ObservableObject
     [ObservableProperty]
     private bool _isOffline;
 
-    public ItemsViewModel(ISkladApiService api, IOfflineCacheService cache)
+    public TasksViewModel(ISkladApiService api, IOfflineCacheService cache)
     {
         _api = api;
         _cache = cache;
@@ -37,26 +34,25 @@ public partial class ItemsViewModel : ObservableObject
     {
         IsBusy = true;
         StatusMessage = string.Empty;
-
         try
         {
-            var items = await _api.GetItemsAsync();
-            _cache.SaveItems(items);
-            UpdateItems(items);
+            var items = await _api.GetTasksAsync();
+            _cache.SaveTasks(items);
+            UpdateTasks(items);
             IsOffline = false;
         }
         catch (Exception ex)
         {
-            var cached = _cache.GetItems();
+            var cached = _cache.GetTasks();
             if (cached != null)
             {
-                UpdateItems(cached);
+                UpdateTasks(cached);
                 IsOffline = true;
                 StatusMessage = "Нет связи. Показаны сохранённые данные.";
             }
             else
             {
-                StatusMessage = $"Ошибка загрузки: {ex.Message}";
+                StatusMessage = $"Ошибка: {ex.Message}";
             }
         }
         finally
@@ -65,10 +61,25 @@ public partial class ItemsViewModel : ObservableObject
         }
     }
 
-    private void UpdateItems(List<ItemDto> items)
+    private void UpdateTasks(List<TaskDto> tasks)
     {
-        Items.Clear();
-        foreach (var item in items)
-            Items.Add(item);
+        Tasks.Clear();
+        foreach (var t in tasks.Where(t => t.Status != "completed" && t.Status != "cancelled"))
+            Tasks.Add(t);
+    }
+
+    [RelayCommand]
+    private async Task CompleteAsync(TaskDto? task)
+    {
+        if (task == null) return;
+        try
+        {
+            await _api.UpdateTaskStatusAsync(task.Id, "completed", null);
+            await LoadAsync();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Ошибка: {ex.Message}";
+        }
     }
 }

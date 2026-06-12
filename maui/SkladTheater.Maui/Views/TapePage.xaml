@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
-    x:Class="SkladTheater.Maui.Views.ItemsPage"
+    x:Class="SkladTheater.Maui.Views.TapePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:SkladTheater.Maui.Models"
-    Title="Предметы">
+    Title="Скотч">
 
     <Grid RowDefinitions="Auto,Auto,*">
-        <SearchBar
-            Grid.Row="0"
-            Placeholder="Поиск предметов"
-            Text="{Binding SearchText}" />
-
         <Label
-            Grid.Row="1"
+            Grid.Row="0"
             IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
             Text="{Binding StatusMessage}"
             TextColor="OrangeRed" />
+
+        <Label
+            Grid.Row="1"
+            Padding="12"
+            Text="{Binding Stats.TotalReceived, StringFormat='Сезон: получено {0}'}" />
 
         <RefreshView
             Grid.Row="2"
             Command="{Binding LoadCommand}"
             IsRefreshing="{Binding IsBusy}">
-            <CollectionView ItemsSource="{Binding Items}">
+            <CollectionView ItemsSource="{Binding Tapes}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:ItemDto">
+                    <DataTemplate x:DataType="models:TapeDto">
                         <Border Margin="8,4" Padding="12">
                             <VerticalStackLayout>
                                 <Label FontAttributes="Bold" Text="{Binding Name}" />
-                                <Label Text="{Binding Description}" TextColor="Gray" />
+                                <Label Text="{Binding Quantity, StringFormat='Остаток: {0}'}" TextColor="Gray" />
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

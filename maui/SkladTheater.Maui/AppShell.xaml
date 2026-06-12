@@ -18,18 +18,24 @@
         Route="ProfilePage"
         FlyoutItemIsVisible="False" />
 
+    <ShellContent
+        Title="Chat"
+        ContentTemplate="{DataTemplate views:ChatRoomPage}"
+        Route="ChatRoomPage"
+        FlyoutItemIsVisible="False" />
+
     <TabBar Route="MainPage">
         <Tab Title="Предметы">
             <ShellContent ContentTemplate="{DataTemplate views:ItemsPage}" />
         </Tab>
         <Tab Title="Задания">
-            <ShellContent ContentTemplate="{DataTemplate views:ItemsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:TasksPage}" />
         </Tab>
         <Tab Title="Сундуки">
-            <ShellContent ContentTemplate="{DataTemplate views:ItemsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:ChestsPage}" />
         </Tab>
         <Tab Title="Чат">
-            <ShellContent ContentTemplate="{DataTemplate views:ItemsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:ChatsPage}" />
         </Tab>
         <Tab Title="Ещё">
             <ShellContent ContentTemplate="{DataTemplate views:MorePage}" />

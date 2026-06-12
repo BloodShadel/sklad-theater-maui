@@ -6,19 +6,16 @@ using System.Collections.ObjectModel;
 
 namespace SkladTheater.Maui.ViewModels;
 
-public partial class ItemsViewModel : ObservableObject
+public partial class ChestsViewModel : ObservableObject
 {
     private readonly ISkladApiService _api;
     private readonly IOfflineCacheService _cache;
 
     [ObservableProperty]
-    private ObservableCollection<ItemDto> _items = new();
+    private ObservableCollection<Chest> _chests = new();
 
     [ObservableProperty]
     private bool _isBusy;
-
-    [ObservableProperty]
-    private string _searchText = string.Empty;
 
     [ObservableProperty]
     private string _statusMessage = string.Empty;
@@ -26,7 +23,7 @@ public partial class ItemsViewModel : ObservableObject
     [ObservableProperty]
     private bool _isOffline;
 
-    public ItemsViewModel(ISkladApiService api, IOfflineCacheService cache)
+    public ChestsViewModel(ISkladApiService api, IOfflineCacheService cache)
     {
         _api = api;
         _cache = cache;
@@ -37,26 +34,25 @@ public partial class ItemsViewModel : ObservableObject
     {
         IsBusy = true;
         StatusMessage = string.Empty;
-
         try
         {
-            var items = await _api.GetItemsAsync();
-            _cache.SaveItems(items);
-            UpdateItems(items);
+            var items = await _api.GetChestsAsync();
+            _cache.SaveChests(items);
+            UpdateChests(items);
             IsOffline = false;
         }
         catch (Exception ex)
         {
-            var cached = _cache.GetItems();
+            var cached = _cache.GetChests();
             if (cached != null)
             {
-                UpdateItems(cached);
+                UpdateChests(cached);
                 IsOffline = true;
                 StatusMessage = "Нет связи. Показаны сохранённые данные.";
             }
             else
             {
-                StatusMessage = $"Ошибка загрузки: {ex.Message}";
+                StatusMessage = $"Ошибка: {ex.Message}";
             }
         }
         finally
@@ -65,10 +61,10 @@ public partial class ItemsViewModel : ObservableObject
         }
     }
 
-    private void UpdateItems(List<ItemDto> items)
+    private void UpdateChests(List<Chest> chests)
     {
-        Items.Clear();
-        foreach (var item in items)
-            Items.Add(item);
+        Chests.Clear();
+        foreach (var c in chests)
+            Chests.Add(c);
     }
 }

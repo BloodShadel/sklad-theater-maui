@@ -1,35 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
-    x:Class="SkladTheater.Maui.Views.ItemsPage"
+    x:Class="SkladTheater.Maui.Views.ShowsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:SkladTheater.Maui.Models"
-    Title="Предметы">
+    Title="Спектакли">
 
-    <Grid RowDefinitions="Auto,Auto,*">
-        <SearchBar
-            Grid.Row="0"
-            Placeholder="Поиск предметов"
-            Text="{Binding SearchText}" />
-
+    <Grid RowDefinitions="Auto,*">
         <Label
-            Grid.Row="1"
+            Grid.Row="0"
             IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
             Text="{Binding StatusMessage}"
             TextColor="OrangeRed" />
 
         <RefreshView
-            Grid.Row="2"
+            Grid.Row="1"
             Command="{Binding LoadCommand}"
             IsRefreshing="{Binding IsBusy}">
-            <CollectionView ItemsSource="{Binding Items}">
+            <CollectionView ItemsSource="{Binding Shows}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:ItemDto">
+                    <DataTemplate x:DataType="models:ShowDto">
                         <Border Margin="8,4" Padding="12">
-                            <VerticalStackLayout>
-                                <Label FontAttributes="Bold" Text="{Binding Name}" />
-                                <Label Text="{Binding Description}" TextColor="Gray" />
-                            </VerticalStackLayout>
+                            <Label FontAttributes="Bold" Text="{Binding Name}" />
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

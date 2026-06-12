@@ -5,5 +5,6 @@
     xmlns:conv="clr-namespace:SkladTheater.Maui.Converters">
 
     <conv:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+    <conv:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter" />
 
 </ResourceDictionary>
