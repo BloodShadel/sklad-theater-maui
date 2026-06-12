@@ -1,18 +1,18 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using SkladTheater.Maui.Helpers;
 using SkladTheater.Maui.Models;
 using SkladTheater.Maui.Services;
-using System.Collections.ObjectModel;
 
 namespace SkladTheater.Maui.ViewModels;
 
 [QueryProperty(nameof(ChatId), "chatId")]
 [QueryProperty(nameof(ChatName), "chatName")]
-public partial class ChatRoomViewModel : ObservableObject, IQueryAttributable
+public partial class ChatRoomViewModel : ObservableObject, IRecipient<ChatMessageReceived>
 {
     private readonly ISkladApiService _api;
-    private readonly IAuthService _authService;
 
     [ObservableProperty]
     private int _chatId;
@@ -24,55 +24,32 @@ public partial class ChatRoomViewModel : ObservableObject, IQueryAttributable
     private string _messageText = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<ChatMessageDto> _messages = new();
-
-    [ObservableProperty]
     private bool _isBusy;
 
     [ObservableProperty]
-    private string _statusMessage = string.Empty;
+    private ObservableCollection<ChatMessageDto> _messages = new();
 
-    private int _currentUserId;
-
-    public ChatRoomViewModel(ISkladApiService api, IAuthService authService)
+    public ChatRoomViewModel(ISkladApiService api)
     {
         _api = api;
-        _authService = authService;
-        WeakReferenceMessenger.Default.Register<ChatMessageReceived>(this, OnMessageReceived);
+        WeakReferenceMessenger.Default.Register(this);
     }
 
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    public void Receive(ChatMessageReceived message)
     {
-        if (query.TryGetValue("chatId", out var cid) && int.TryParse(cid.ToString(), out var id))
-            ChatId = id;
-        if (query.TryGetValue("chatName", out var name))
-            ChatName = Uri.UnescapeDataString(name?.ToString() ?? string.Empty);
-
-        _ = InitializeAsync();
+        if (message.Message.ChatId != ChatId) return;
+        ResolveAvatar(message.Message);
+        MainThread.BeginInvokeOnMainThread(() => Messages.Add(message.Message));
     }
 
-    private async Task InitializeAsync()
+    public async Task LoadMessagesAsync()
     {
-        var user = await _authService.GetCurrentUserAsync();
-        _currentUserId = user != null ? (int)user.Id : 0;
-        await LoadAsync();
-    }
-
-    [RelayCommand]
-    private async Task LoadAsync()
-    {
-        if (ChatId <= 0) return;
         IsBusy = true;
         try
         {
-            var msgs = await _api.GetMessagesAsync(ChatId, limit: 100);
-            Messages.Clear();
-            foreach (var m in msgs)
-                Messages.Add(m);
-        }
-        catch (Exception ex)
-        {
-            StatusMessage = $"Ошибка: {ex.Message}";
+            var list = await _api.GetMessagesAsync(ChatId);
+            foreach (var m in list) ResolveAvatar(m);
+            Messages = new ObservableCollection<ChatMessageDto>(list);
         }
         finally
         {
@@ -80,28 +57,34 @@ public partial class ChatRoomViewModel : ObservableObject, IQueryAttributable
         }
     }
 
+    private static void ResolveAvatar(ChatMessageDto message)
+    {
+        message.SenderAvatarUrl = ImageUrlHelper.Resolve(message.SenderAvatarUrl);
+    }
+
     [RelayCommand]
     private async Task SendAsync()
     {
-        if (ChatId <= 0 || string.IsNullOrWhiteSpace(MessageText)) return;
+        if (string.IsNullOrWhiteSpace(MessageText)) return;
+
+        IsBusy = true;
         try
         {
             var sent = await _api.SendMessageAsync(ChatId, MessageText.Trim(), null);
             if (sent != null)
             {
+                ResolveAvatar(sent);
                 Messages.Add(sent);
                 MessageText = string.Empty;
             }
+            else
+            {
+                await Shell.Current.DisplayAlert("Ошибка", "Не удалось отправить сообщение", "OK");
+            }
         }
-        catch (Exception ex)
+        finally
         {
-            StatusMessage = $"Ошибка отправки: {ex.Message}";
+            IsBusy = false;
         }
-    }
-
-    private void OnMessageReceived(object recipient, ChatMessageReceived msg)
-    {
-        if (msg.Message.ChatId != ChatId) return;
-        MainThread.BeginInvokeOnMainThread(() => Messages.Add(msg.Message));
     }
 }

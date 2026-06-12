@@ -9,7 +9,6 @@ namespace SkladTheater.Maui.ViewModels;
 public partial class ProfileViewModel : ObservableObject
 {
     private readonly IAuthService _authService;
-    private readonly ITokenService _tokenService;
     private readonly ISkladApiService _api;
 
     [ObservableProperty]
@@ -21,10 +20,9 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty]
     private bool _isBusy;
 
-    public ProfileViewModel(IAuthService authService, ITokenService tokenService, ISkladApiService api)
+    public ProfileViewModel(IAuthService authService, ISkladApiService api)
     {
         _authService = authService;
-        _tokenService = tokenService;
         _api = api;
     }
 
@@ -35,12 +33,7 @@ public partial class ProfileViewModel : ObservableObject
         {
             var current = await _authService.GetCurrentUserAsync();
             User = current;
-            if (!string.IsNullOrEmpty(current?.AvatarUrl))
-            {
-                AvatarUrl = current.AvatarUrl.StartsWith("http")
-                    ? current.AvatarUrl
-                    : AppConfig.BaseUrl.TrimEnd('/') + current.AvatarUrl;
-            }
+            AvatarUrl = ImageUrlHelper.Resolve(current?.AvatarUrl);
         }
         finally
         {
@@ -60,10 +53,7 @@ public partial class ProfileViewModel : ObservableObject
             await using var stream = await photo.OpenReadAsync();
             var fileName = photo.FileName ?? "avatar.jpg";
             var url = await _authService.UploadAvatarAsync(stream, fileName);
-            if (!string.IsNullOrEmpty(url))
-            {
-                AvatarUrl = url.StartsWith("http") ? url : AppConfig.BaseUrl.TrimEnd('/') + url;
-            }
+            AvatarUrl = ImageUrlHelper.Resolve(url);
         }
         catch (Exception ex)
         {

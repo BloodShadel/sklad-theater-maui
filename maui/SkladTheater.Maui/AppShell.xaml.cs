@@ -21,6 +21,11 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("TapePage", typeof(Views.TapePage));
         Routing.RegisterRoute("ShowsPage", typeof(Views.ShowsPage));
         Routing.RegisterRoute("KassetyPage", typeof(Views.KassetyPage));
+        Routing.RegisterRoute("GrafikPage", typeof(Views.GrafikPage));
+        Routing.RegisterRoute("KranoPage", typeof(Views.KranoPage));
+        Routing.RegisterRoute("HistoryPage", typeof(Views.HistoryPage));
+        Routing.RegisterRoute("RolesPage", typeof(Views.RolesPage));
+        Routing.RegisterRoute("UsersPage", typeof(Views.UsersPage));
         Routing.RegisterRoute("PlaceholderPage", typeof(Views.PlaceholderPage));
     }
 }

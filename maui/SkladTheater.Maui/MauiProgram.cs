@@ -37,6 +37,11 @@ public static class MauiProgram
         builder.Services.AddTransient<TapeViewModel>();
         builder.Services.AddTransient<ShowsViewModel>();
         builder.Services.AddTransient<KassetyViewModel>();
+        builder.Services.AddTransient<GrafikViewModel>();
+        builder.Services.AddTransient<KranoViewModel>();
+        builder.Services.AddTransient<HistoryViewModel>();
+        builder.Services.AddTransient<RolesViewModel>();
+        builder.Services.AddTransient<UsersViewModel>();
         builder.Services.AddTransient<ChatsViewModel>();
         builder.Services.AddTransient<ChatRoomViewModel>();
         builder.Services.AddTransient<ProfileViewModel>();
@@ -52,6 +57,11 @@ public static class MauiProgram
         builder.Services.AddTransient<TapePage>();
         builder.Services.AddTransient<ShowsPage>();
         builder.Services.AddTransient<KassetyPage>();
+        builder.Services.AddTransient<GrafikPage>();
+        builder.Services.AddTransient<KranoPage>();
+        builder.Services.AddTransient<HistoryPage>();
+        builder.Services.AddTransient<RolesPage>();
+        builder.Services.AddTransient<UsersPage>();
         builder.Services.AddTransient<ChatsPage>();
         builder.Services.AddTransient<ChatRoomPage>();
         builder.Services.AddTransient<ProfilePage>();

@@ -1,35 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-    x:Class="SkladTheater.Maui.Views.ChatRoomPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:SkladTheater.Maui.Models"
-    Title="{Binding ChatName}">
-
-    <Grid RowDefinitions="*,Auto,Auto">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SkladTheater.Maui.Views.ChatRoomPage"
+             xmlns:vm="clr-namespace:SkladTheater.Maui.ViewModels"
+             xmlns:models="clr-namespace:SkladTheater.Maui.Models"
+             Title="{Binding ChatName}">
+    <Grid RowDefinitions="*,Auto" Padding="10">
         <CollectionView Grid.Row="0" ItemsSource="{Binding Messages}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ChatMessageDto">
-                    <Border Margin="8,4" Padding="10">
-                        <VerticalStackLayout>
-                            <Label FontAttributes="Bold" Text="{Binding SenderName}" />
-                            <Label Text="{Binding Text}" />
-                            <Label FontSize="10" Text="{Binding CreatedAt}" TextColor="Gray" />
-                        </VerticalStackLayout>
-                    </Border>
+                    <Grid Padding="6" ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Image Grid.Column="0" Source="{Binding SenderAvatarUrl, FallbackValue=''}"
+                               WidthRequest="40" HeightRequest="40" Aspect="AspectFill"
+                               BackgroundColor="#E0E0E0">
+                            <Image.Clip>
+                                <EllipseGeometry Center="20,20" RadiusX="20" RadiusY="20"/>
+                            </Image.Clip>
+                        </Image>
+                        <Frame Grid.Column="1" Padding="10" CornerRadius="12" BackgroundColor="#F1F1F1" HasShadow="False">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="{Binding SenderName, FallbackValue=''}" FontAttributes="Bold" FontSize="12" TextColor="#6200EE"/>
+                                <Label Text="{Binding Text}" FontSize="14"/>
+                                <Label Text="{Binding CreatedAt, StringFormat='{0:HH:mm}'}" FontSize="10" TextColor="Gray" HorizontalOptions="End"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Label
-            Grid.Row="1"
-            IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-            Text="{Binding StatusMessage}"
-            TextColor="Red" />
-
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Padding="8">
-            <Entry Grid.Column="0" Placeholder="Сообщение" Text="{Binding MessageText}" />
-            <Button Grid.Column="1" Command="{Binding SendCommand}" Text="→" />
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="0,8,0,0">
+            <Entry Grid.Column="0" Placeholder="Сообщение..." Text="{Binding MessageText}" ReturnCommand="{Binding SendCommand}"/>
+            <Button Grid.Column="1" Text="→" Command="{Binding SendCommand}" WidthRequest="60"/>
         </Grid>
+
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center"/>
     </Grid>
 </ContentPage>

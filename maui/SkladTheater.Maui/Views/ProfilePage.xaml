@@ -1,30 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-    x:Class="SkladTheater.Maui.Views.ProfilePage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Профиль">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SkladTheater.Maui.Views.ProfilePage"
+             xmlns:vm="clr-namespace:SkladTheater.Maui.ViewModels"
+             Title="Профиль">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Image Source="{Binding AvatarUrl}"
+                   WidthRequest="120" HeightRequest="120"
+                   Aspect="AspectFill"
+                   BackgroundColor="#E0E0E0">
+                <Image.Clip>
+                    <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60"/>
+                </Image.Clip>
+            </Image>
+            <Button Text="Сменить аватар" Command="{Binding PickAvatarCommand}" HorizontalOptions="Center"/>
 
-    <VerticalStackLayout Padding="24" Spacing="16">
-        <Image
-            Aspect="AspectFill"
-            HeightRequest="120"
-            HorizontalOptions="Center"
-            Source="{Binding AvatarUrl}"
-            WidthRequest="120">
-            <Image.Clip>
-                <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60" />
-            </Image.Clip>
-        </Image>
+            <Label Text="{Binding User.FullName, FallbackValue='ФИО'}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <Label Text="{Binding User.Login, FallbackValue='login'}" FontSize="14" TextColor="Gray" HorizontalOptions="Center"/>
+            <Label Text="{Binding User.Role, FallbackValue='Роль'}" FontSize="16" TextColor="#6200EE" HorizontalOptions="Center"/>
 
-        <Button Command="{Binding PickAvatarCommand}" Text="Сменить фото" />
-
-        <Label FontAttributes="Bold" FontSize="22" HorizontalOptions="Center" Text="{Binding User.DisplayName}" />
-        <Label HorizontalOptions="Center" Text="{Binding User.Login}" TextColor="Gray" />
-        <Label HorizontalOptions="Center" Text="{Binding User.RoleName}" TextColor="Gray" />
-
-        <Button Command="{Binding LogoutCommand}" Text="Выйти" />
-
-        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-    </VerticalStackLayout>
+            <Button Text="Выйти" Command="{Binding LogoutCommand}" BackgroundColor="#B00020" TextColor="White" Margin="0,20,0,0"/>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

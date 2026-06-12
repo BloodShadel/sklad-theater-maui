@@ -64,3 +64,11 @@ Thumbs.db
 # Temp
 *.tmp
 .temp/
+
+# Local tooling / SDK
+.claude/
+_android_sdk/
+_android_studio/
+jdk-*/
+jdk*.zip
+start-android-studio.bat

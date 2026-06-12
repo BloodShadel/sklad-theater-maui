@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="SkladTheater.Maui.Views.UsersPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SkladTheater.Maui.Models"
+    Title="Персонал">
+
+    <Grid RowDefinitions="Auto,*">
+        <Label
+            Grid.Row="0"
+            IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+            Text="{Binding StatusMessage}"
+            TextColor="OrangeRed" />
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding LoadCommand}"
+            IsRefreshing="{Binding IsBusy}">
+            <CollectionView ItemsSource="{Binding Users}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:UserDto">
+                        <Border Margin="8,4" Padding="12">
+                            <VerticalStackLayout>
+                                <Label FontAttributes="Bold" Text="{Binding DisplayName}" />
+                                <Label Text="{Binding RoleName}" TextColor="Gray" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

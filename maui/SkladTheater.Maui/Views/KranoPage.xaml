@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="SkladTheater.Maui.Views.KranoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SkladTheater.Maui.Models"
+    Title="Краснопахрская">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+        <Picker
+            Grid.Row="0"
+            Margin="12,8"
+            SelectedIndex="{Binding SelectedTab}">
+            <Picker.Items>
+                <x:String>Подготовка</x:String>
+                <x:String>Сундуки</x:String>
+                <x:String>Предметы</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <Button
+            Grid.Row="1"
+            Margin="12,0"
+            Command="{Binding LoadCommand}"
+            Text="Обновить" />
+
+        <RefreshView
+            Grid.Row="2"
+            Command="{Binding LoadCommand}"
+            IsRefreshing="{Binding IsBusy}">
+            <Grid>
+                <CollectionView IsVisible="{Binding SelectedTab, Converter={StaticResource IntEqualsConverter}, ConverterParameter=0}" ItemsSource="{Binding Preparing}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Chest">
+                            <Border Margin="8,4" Padding="12">
+                                <Label FontAttributes="Bold" Text="{Binding Name}" />
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <CollectionView IsVisible="{Binding SelectedTab, Converter={StaticResource IntEqualsConverter}, ConverterParameter=1}" ItemsSource="{Binding Chests}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Chest">
+                            <Border Margin="8,4" Padding="12">
+                                <Label FontAttributes="Bold" Text="{Binding Name}" />
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <CollectionView IsVisible="{Binding SelectedTab, Converter={StaticResource IntEqualsConverter}, ConverterParameter=2}" ItemsSource="{Binding Items}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ItemDto">
+                            <Border Margin="8,4" Padding="12">
+                                <Label FontAttributes="Bold" Text="{Binding Name}" />
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </RefreshView>
+    </Grid>
+</ContentPage>

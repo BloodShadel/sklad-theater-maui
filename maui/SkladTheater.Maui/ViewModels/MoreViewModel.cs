@@ -36,12 +36,12 @@ public partial class MoreViewModel : ObservableObject
             new() { Title = "Скотч", Href = "tape.html", Route = "TapePage" },
             new() { Title = "Спектакли", Href = "shows.html", Route = "ShowsPage" },
             new() { Title = "Кассеты", Href = "kassety.html", Route = "KassetyPage" },
-            new() { Title = "График", Href = "grafik.html", Route = "PlaceholderPage" },
-            new() { Title = "Краснопахрская", Href = "krano.html", Route = "PlaceholderPage" },
-            new() { Title = "История", Href = "history.html", Route = "PlaceholderPage" },
-            new() { Title = "Роли", Href = "roles.html", Route = "PlaceholderPage" },
+            new() { Title = "График", Href = "grafik.html", Route = "GrafikPage" },
+            new() { Title = "Краснопахрская", Href = "krano.html", Route = "KranoPage" },
+            new() { Title = "История", Href = "history.html", Route = "HistoryPage" },
+            new() { Title = "Роли", Href = "roles.html", Route = "RolesPage" },
             new() { Title = "Развеска", Href = "razveska.html", Route = "PlaceholderPage" },
-            new() { Title = "Персонал", Href = "users.html", Route = "PlaceholderPage" },
+            new() { Title = "Персонал", Href = "users.html", Route = "UsersPage" },
             new() { Title = "Профиль", Href = "profile.html", Route = "ProfilePage" },
         };
 
